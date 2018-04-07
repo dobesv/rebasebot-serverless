@@ -1,0 +1,13 @@
+service: rebasebot-serverless
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+
+functions:
+  hello:
+    handler: handler.rebasebot
+    events:
+      - http:
+          path: /webhook
+          method: post

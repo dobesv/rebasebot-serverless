@@ -1,0 +1,11 @@
+{
+  "name": "rebasebot-serverless",
+  "version": "1.0.0",
+  "main": "handler.js",
+  "author": "Dobes Vandermeer <dobesv@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "lambda-git": "^0.1.2",
+    "lodash": "^4.17.5"
+  }
+}
