@@ -64,3 +64,5 @@ jspm_packages
 
 # Serverless directories
 .serverless
+secrets.yml
+.idea/
