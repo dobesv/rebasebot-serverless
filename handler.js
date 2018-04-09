@@ -87,7 +87,7 @@ const do_rebase = async pull_request => {
     await run(`git fetch -q --all`);
     await run(`git checkout -t -f -B ${ref} origin/${ref}`);
     await run(`git rebase --autosquash ${base_repo_owner}/${base_ref}`);
-    await run(`git push -f origin ${base_ref}`);
+    await run(`git push -f origin ${ref}`);
     await github.add_comment_to_issue(
       pull_request.issue_url,
       '\n```\n' + output.join('') + '\n```\n',
