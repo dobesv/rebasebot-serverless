@@ -1,4 +1,5 @@
 const rp = require('request-promise');
+const URL = require('url').URL;
 
 const settings = {
   github_token: process.env.GITHUB_TOKEN,
@@ -11,6 +12,7 @@ const request = async options => {
   if (typeof options === 'string') {
     return request({ uri: options, method: 'GET' });
   }
+  options.url = new URL(options.url, 'https://api.github.com').toString();
   if (!options.headers) options.headers = {};
   if (!options.headers.Authorization)
     options.headers.Authorization = `token ${settings.github_token}`;

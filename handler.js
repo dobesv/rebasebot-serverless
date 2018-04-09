@@ -48,7 +48,7 @@ const handler = fn => (event, context, callback) => {
     });
 };
 
-const do_rebase = async (pull_request) => {
+const do_rebase = async pull_request => {
   const repo_name = get(pull_request, ['head', 'repo', 'full_name']);
   const owner = get(pull_request, ['head', 'repo', 'owner', 'login']);
   const repo_basename = get(pull_request, ['head', 'repo', 'name']);
@@ -75,6 +75,8 @@ const do_rebase = async (pull_request) => {
     if (!repoAlreadyCloned) {
       mkdirIfNotExistsSync(repo_owner_dir);
       await run(`git clone ${repoUrl(repo_name)} ${repo_dir}`, repo_owner_dir);
+      await run(`git config user.email ${settings.login}@users.noreply.github.com`);
+      await run(`git config user.name "Rebase Bot"`);
     }
 
     if (repoAlreadyCloned) await run(`git fetch origin`);
@@ -98,7 +100,7 @@ const do_rebase = async (pull_request) => {
     await github.add_comment_to_issue(
       pull_request.issue_url,
       '\n```\n' +
-      output.join('') +
+        output.join('') +
         '\n' +
         (err.output || err.stack || String(err)) +
         '\n```\n',
@@ -127,6 +129,7 @@ module.exports.rebasebot = handler(async (data, event, context) => {
         await do_rebase(pull_request);
         await github.add_reaction_to_comment(data.comment.url, 'hooray');
       } catch (err) {
+        console.error(err.stack || err.message || err);
         await github.add_reaction_to_comment(data.comment.url, '-1');
       } finally {
         await github.delete_reaction(plus_one_reaction);
