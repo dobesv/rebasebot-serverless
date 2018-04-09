@@ -2,10 +2,22 @@ service: rebasebot-serverless
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
+  environment:
+    GITHUB_TOKEN: "${self:custom.secrets.GITHUB_TOKEN}"
+    GITHUB_LOGIN: "${self:custom.secrets.GITHUB_LOGIN}"
+    WEBHOOK_SECRET: "${self:custom.secrets.WEBHOOK_SECRET}"
+
+package:
+  exclude:
+    - secrets.yml
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  secrets: ${file(secrets.yml):${self:custom.stage}}
 
 functions:
-  hello:
+  rebasebot:
     handler: handler.rebasebot
     events:
       - http:
