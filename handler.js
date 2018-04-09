@@ -101,7 +101,7 @@ const do_rebase = async pull_request => {
       '\n```\n' +
         output.join('') +
         '\n' +
-        (err.output || err.stack || String(err)) +
+        (err.stack || String(err)) +
         '\n```\n',
     );
     throw err;
