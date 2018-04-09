@@ -79,14 +79,13 @@ const do_rebase = async pull_request => {
       await run(`git config user.name "Rebase Bot"`);
     }
 
-    if (repoAlreadyCloned) await run(`git fetch origin`);
     await run(
       `git config remote.${base_repo_owner}.url || git remote add ${base_repo_owner} ${repoUrl(
         base_repo_name,
       )}`,
     );
-    await run(`git fetch ${base_repo_owner}`);
-    await run(`git checkout -t -f -B ${ref} ${base_repo_owner}/${ref}`);
+    await run(`git fetch -q --all`);
+    await run(`git checkout -t -f -B ${ref} origin/${ref}`);
     await run(`git rebase --autosquash ${base_repo_owner}/${base_ref}`);
     await run(`git push -f origin ${base_ref}`);
     await github.add_comment_to_issue(
@@ -102,7 +101,7 @@ const do_rebase = async pull_request => {
       '\n```\n' +
         output.join('') +
         '\n' +
-        (err.output || err.stack || String(err)) +
+        (err.stack || String(err)) +
         '\n```\n',
     );
     throw err;

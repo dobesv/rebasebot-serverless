@@ -3,6 +3,8 @@ service: rebasebot-serverless
 provider:
   name: aws
   runtime: nodejs8.10
+  memorySize: 256 # optional, in MB, default is 1024
+  timeout: 300 # optional, in seconds, default is 6
   environment:
     GITHUB_TOKEN: "${self:custom.secrets.GITHUB_TOKEN}"
     GITHUB_LOGIN: "${self:custom.secrets.GITHUB_LOGIN}"
